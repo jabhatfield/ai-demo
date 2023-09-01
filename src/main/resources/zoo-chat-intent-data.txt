@@ -1,0 +1,16 @@
+opening-times when are you open
+opening-times what time do you open
+opening-times what are your opening times
+opening-times what are your opening hours
+opening-times when do you close
+opening-times what time do you close
+opening-times what are your holiday times
+opening-times what are your bank holiday opening hours
+opening-times what are your public holiday opening hours
+opening-times are you open on holidays
+animal-list what animals do you have
+animal-list do you have giraffes
+animal-list do you have elephants
+animal-list do you have lions
+animal-list how many animals do you have
+animal-list how big is the zoo
