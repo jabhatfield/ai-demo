@@ -1,9 +1,11 @@
 package com.jonhatfield.aidemo.controller;
 
 import com.jonhatfield.aidemo.dto.OpenAIDemoRequest;
+import com.jonhatfield.aidemo.service.OpenNlpService;
 import lombok.extern.slf4j.Slf4j;
 import opennlp.tools.doccat.*;
 import opennlp.tools.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,34 +25,15 @@ public class OpenNlpController {
     @Value("${openai.model}")
     private String model;
 
-    @Value("classpath:zoo-chat-intent-data.txt")
-    Resource intentDataFile;
+    private OpenNlpService openNlpService;
 
-    @PostMapping("/chat")
-    public String sendChatMessage(@RequestBody OpenAIDemoRequest openAIDemoRequest) {
-        DoccatModel model = null;
+    @Autowired
+    public OpenNlpController(OpenNlpService openNlpService) {
+        this.openNlpService = openNlpService;
+    }
 
-        try {
-            InputStreamFactory inputStreamFactory = new MarkableFileInputStreamFactory(intentDataFile.getFile());
-            ObjectStream<String> lineStream = new PlainTextByLineStream(inputStreamFactory,"UTF-8");
-            ObjectStream<DocumentSample> sampleStream = new DocumentSampleStream(lineStream);
-
-            TrainingParameters trainingParams = new TrainingParameters();
-            trainingParams.put(TrainingParameters.ITERATIONS_PARAM, 100);//TODO config
-            trainingParams.put(TrainingParameters.CUTOFF_PARAM, 0);
-
-            DoccatFactory factory = new DoccatFactory(new FeatureGenerator[]{new BagOfWordsFeatureGenerator()});
-
-            model = DocumentCategorizerME.train("en", sampleStream, trainingParams, new DoccatFactory());
-
-            String inputText = "time";
-            DocumentCategorizerME myCategorizer = new DocumentCategorizerME(model);
-            double[] outcomes = myCategorizer.categorize(new String[]{inputText});
-            String category = myCategorizer.getBestCategory(outcomes);
-            return category;
-        } catch (Exception e) {
-            log.error("error", e);
-            return "error";//TODO error handling
-        }
+    @PostMapping("/categorise")
+    public String categorise(@RequestBody OpenAIDemoRequest openAIDemoRequest) {
+        return openNlpService.categorise(new String[]{openAIDemoRequest.getMessage()});
     }
 }
