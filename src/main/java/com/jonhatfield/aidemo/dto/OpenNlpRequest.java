@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class OpenAIDemoRequest {
+public class OpenNlpRequest {
 
     String message;
     String model;

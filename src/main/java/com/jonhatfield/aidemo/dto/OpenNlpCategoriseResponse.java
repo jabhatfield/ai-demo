@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OpenAIResponse {
-    private List<OpenAIChoice> choices;
+public class OpenNlpCategoriseResponse {
+    private String category;
+    private String reply;
+    private Map<String, Double> probabilities;
 }
