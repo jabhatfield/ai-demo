@@ -1,8 +1,6 @@
 package com.jonhatfield.aidemo.controller;
 
-import com.jonhatfield.aidemo.dto.OpenNlpCategoriseResponse;
-import com.jonhatfield.aidemo.dto.OpenNlpRequest;
-import com.jonhatfield.aidemo.dto.OpenNlpTokenizeResponse;
+import com.jonhatfield.aidemo.dto.*;
 import com.jonhatfield.aidemo.service.OpenNlpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +26,18 @@ public class OpenNlpController {
     }
 
     @PostMapping("/categorise")
-    public OpenNlpCategoriseResponse categorise(@RequestBody OpenNlpRequest openNlpRequest) {
+    public OpenNlpCategoriseResponse categorise(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
         //todo allow only first word for this API call
-        return openNlpService.categorise(new String[]{openNlpRequest.getMessage()});
+        return openNlpService.categorise(new String[]{openNlpTextRequest.getMessage()});
     }
 
     @PostMapping("/tokenize")
-    public OpenNlpTokenizeResponse tokenize(@RequestBody OpenNlpRequest openNlpRequest) {
-        return openNlpService.tokenize(openNlpRequest.getMessage());
+    public OpenNlpTokenizeResponse tokenize(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
+        return openNlpService.tokenize(openNlpTextRequest.getMessage());
+    }
+
+    @PostMapping("/tag-parts-of-speech")
+    public OpenNlpPosResponse tagPartsOfSpeech(@RequestBody OpenNlpPosRequest openNlpPosRequest) {
+        return openNlpService.tagPartsOfSpeech(openNlpPosRequest.getTokens());
     }
 }

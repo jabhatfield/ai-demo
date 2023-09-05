@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -13,5 +15,5 @@ import java.util.Map;
 @NoArgsConstructor
 public class OpenNlpTokenizeResponse {
     private String[] tokens;
-    private Map<String, Double> probabilities;
+    List<ImmutablePair<String, Double>> probabilities;
 }
