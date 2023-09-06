@@ -1,11 +1,14 @@
 package com.jonhatfield.aidemo.service;
 
 import com.jonhatfield.aidemo.dto.OpenNlpCategoriseResponse;
+import com.jonhatfield.aidemo.dto.OpenNlpLemmatizeResponse;
 import com.jonhatfield.aidemo.dto.OpenNlpPosResponse;
 import com.jonhatfield.aidemo.dto.OpenNlpTokenizeResponse;
 import com.jonhatfield.aidemo.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import opennlp.tools.doccat.*;
+import opennlp.tools.lemmatizer.LemmatizerME;
+import opennlp.tools.lemmatizer.LemmatizerModel;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.tokenize.TokenizerME;
@@ -35,6 +38,9 @@ public class OpenNlpService {
     @Value("classpath:en-pos-maxent.bin")
     Resource posPretrainedModel;
 
+    @Value("classpath:en-lemmatizer.bin")
+    Resource lemmatizerPretrainedModel;
+
     private ResponseUtil responseUtil;
 
     @Autowired
@@ -43,8 +49,6 @@ public class OpenNlpService {
     }
 
     public OpenNlpCategoriseResponse categorise(String[] inputTokens) {
-        DoccatModel model = null;
-
         try {
             InputStreamFactory inputStreamFactory = new MarkableFileInputStreamFactory(intentDataFile.getFile());
             ObjectStream<String> lineStream = new PlainTextByLineStream(inputStreamFactory,"UTF-8");
@@ -56,7 +60,7 @@ public class OpenNlpService {
 
             DoccatFactory factory = new DoccatFactory(new FeatureGenerator[]{new BagOfWordsFeatureGenerator()});
 
-            model = DocumentCategorizerME.train("en", sampleStream, trainingParams, factory);
+            DoccatModel model = DocumentCategorizerME.train("en", sampleStream, trainingParams, factory);
 
             DocumentCategorizerME myCategorizer = new DocumentCategorizerME(model);
             double[] outcomes = myCategorizer.categorize(inputTokens);
@@ -106,6 +110,26 @@ public class OpenNlpService {
             }
 
             return new OpenNlpPosResponse(tags, probabilityPairs);
+        } catch (Exception e) {
+            log.error("error", e);
+            return null;//TODO error handling
+        }
+    }
+
+    public OpenNlpLemmatizeResponse lemmatize(String[] tokens, String[] posTags) {
+        try {
+            InputStream modelIn = new FileInputStream(lemmatizerPretrainedModel.getFile());
+            LemmatizerModel model = new LemmatizerModel(modelIn);
+            LemmatizerME lemmatizer = new LemmatizerME(model);
+            String[] lemmas = lemmatizer.lemmatize(tokens, posTags);
+            double probabilities[] = lemmatizer.probs();
+
+            List<ImmutablePair<String, Double>> probabilityPairs = new ArrayList<>();
+            for(int i = 0; i < lemmas.length; i++) {
+                probabilityPairs.add(new ImmutablePair<>(lemmas[i], probabilities[i]));
+            }
+
+            return new OpenNlpLemmatizeResponse(lemmas, probabilityPairs);
         } catch (Exception e) {
             log.error("error", e);
             return null;//TODO error handling

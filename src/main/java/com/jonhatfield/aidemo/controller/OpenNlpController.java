@@ -40,4 +40,13 @@ public class OpenNlpController {
     public OpenNlpPosResponse tagPartsOfSpeech(@RequestBody OpenNlpPosRequest openNlpPosRequest) {
         return openNlpService.tagPartsOfSpeech(openNlpPosRequest.getTokens());
     }
+
+    @PostMapping("/lemmatize")
+    public OpenNlpLemmatizeResponse lemmatize(@RequestBody OpenNlpLemmatizeRequest openNlpLemmatizeRequest) {
+        return openNlpService.lemmatize(openNlpLemmatizeRequest.getTokens(), openNlpLemmatizeRequest.getPosTags());
+    }
+
+    //TODO lemma, all together, error handling - code, OPENNLP_ERROR_001, message inc how to fix and eg
+    //more data categories, ticket prices adult child family membership, directions, contact details total
+    //5 categories
 }
