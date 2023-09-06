@@ -29,7 +29,7 @@ import java.util.*;
 @Service
 public class OpenNlpService {
 
-    @Value("classpath:zoo-chat-intent-data.txt")
+    @Value("classpath:lemmatized-classification-data.txt")
     Resource intentDataFile;
 
     @Value("classpath:en-token.bin")
@@ -72,6 +72,7 @@ public class OpenNlpService {
             return new OpenNlpCategoriseResponse(category, reply, probabilities);
         } catch (Exception e) {
             log.error("error", e);
+            //todo allow only first word for this API call
             return null;//TODO error handling
         }
     }

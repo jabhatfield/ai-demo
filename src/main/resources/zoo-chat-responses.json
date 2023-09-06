@@ -1,4 +1,7 @@
 {
   "opening-times" : "The opening times are Mon - Fri 9am - 7pm every day, including holidays",
-  "animal-list" : "The zoo has 10 giraffes, 3 elephants, 2 lions and 12 penguins"
+  "animal-list" : "The zoo has 10 giraffes, 3 elephants, 2 lions and 12 penguins",
+  "ticket-prices" : "Tickets cost £20 for adults and £10 for children. Refunds are permitted 48 hours or more prior to entry time",
+  "directions" : "We are located at 1 Zoo Lane, London. There is free parking plus train and bus stations within 100 metres",
+  "contact-details" : "Contact us at info@megazoo.com or call 01234 567 890. We will be happy to help you"
 }

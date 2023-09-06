@@ -27,7 +27,6 @@ public class OpenNlpController {
 
     @PostMapping("/categorise")
     public OpenNlpCategoriseResponse categorise(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
-        //todo allow only first word for this API call
         return openNlpService.categorise(new String[]{openNlpTextRequest.getMessage()});
     }
 
@@ -46,7 +45,15 @@ public class OpenNlpController {
         return openNlpService.lemmatize(openNlpLemmatizeRequest.getTokens(), openNlpLemmatizeRequest.getPosTags());
     }
 
-    //TODO lemma, all together, error handling - code, OPENNLP_ERROR_001, message inc how to fix and eg
-    //more data categories, ticket prices adult child family membership, directions, contact details total
-    //5 categories
+    @PostMapping("/chat")
+    public OpenNlpCategoriseResponse chat(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
+        OpenNlpTokenizeResponse tokenizeResponse = openNlpService.tokenize(openNlpTextRequest.getMessage());
+        String[] tokens = tokenizeResponse.getTokens();
+        OpenNlpPosResponse posResponse = openNlpService.tagPartsOfSpeech(tokens);
+        OpenNlpLemmatizeResponse lemmatizeResponse = openNlpService.lemmatize(tokens, posResponse.getTags());
+
+        return openNlpService.categorise(lemmatizeResponse.getLemmas());
+    }
+
+    //TODO error handling - code, OPENNLP_ERROR_001, message inc how to fix and eg, get lzied class data()
 }

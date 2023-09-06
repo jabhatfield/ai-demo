@@ -1,0 +1,50 @@
+opening-times when be you open
+opening-times what time do you open
+opening-times what be your open time
+opening-times what be your open hour
+opening-times when do you close
+opening-times what time do you close
+opening-times what be your holiday time
+opening-times what be your bank holiday open hour
+opening-times what be your public holiday open hour
+opening-times be you open on holiday
+animal-list what animal do you have
+animal-list do you have giraffe
+animal-list do you have elephant
+animal-list do you have lion
+animal-list do you have reptile
+animal-list do you have insect
+animal-list how many animal do you have
+animal-list how big be the zoo
+animal-list what size be the zoo
+animal-list what be in the zoo
+ticket-prices how much be it
+ticket-prices how much be a ticket
+ticket-prices how much be an adult ticket
+ticket-prices how much be a family ticket
+ticket-prices how much be membership
+ticket-prices what be the price of a ticket
+ticket-prices what be the cost of a ticket
+ticket-prices do you have discount
+ticket-prices I want a refund
+ticket-prices what be your cancellation policy
+directions where be you
+directions how do I find you
+directions what be your location
+directions give me direction
+directions show me a map
+directions be there a train station nearby
+directions be there a bus stop nearby
+directions show me the drive route
+directions do you have parking
+directions what be your address
+contact-details what be your email address
+contact-details what be your support email
+contact-details what be your phone number
+contact-details what be your telephone number
+contact-details how do I contact you
+contact-details I need customer support
+contact-details I have a query
+contact-details I have a question
+contact-details who do I ask about my booking
+contact-details I have a complaint
