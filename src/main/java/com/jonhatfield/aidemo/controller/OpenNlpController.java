@@ -91,5 +91,5 @@ public class OpenNlpController {
         return openNlpService.getLemmatizedClassificationData();
     }
 
-    //TODO error handling inc how to fix and eg, all code cleanup inc dlj
+    //TODO error handling, all code cleanup inc dlj
 }

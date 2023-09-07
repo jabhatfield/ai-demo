@@ -10,7 +10,7 @@ public enum ErrorMapping {
 
     MISSING_FIELD(MissingFieldException.class.getName(), "001_MISSING_FIELD", true),
     EMPTY_ARRAY(EmptyArrayException.class.getName(), "002_EMPTY_ARRAY", true),
-    UNKNOWN("UNKNOWN", "100_UNKNOWN_ERROR", false);//OPENNLP_ERROR_001
+    UNKNOWN("UNKNOWN", "100_UNKNOWN_ERROR", false);
 
     private final String exceptionName;
     private final String code;
