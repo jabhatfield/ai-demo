@@ -2,8 +2,10 @@ package com.jonhatfield.aidemo.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jonhatfield.aidemo.dto.*;
+import com.jonhatfield.aidemo.exception.MissingFieldException;
 import com.jonhatfield.aidemo.service.OpenNlpService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,9 @@ public class OpenNlpController {
 
     @PostMapping("/chat")
     public OpenNlpCategoriseResponse chat(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
+        if(StringUtils.isBlank(openNlpTextRequest.getMessage())) {
+            throw new MissingFieldException("message");
+        }
         OpenNlpTokenizeResponse tokenizeResponse = openNlpService.tokenize(openNlpTextRequest.getMessage());
         String[] tokens = tokenizeResponse.getTokens();
         OpenNlpPosResponse posResponse = openNlpService.tagPartsOfSpeech(tokens);
@@ -66,4 +71,5 @@ public class OpenNlpController {
     }
 
     //TODO error handling - code, OPENNLP_ERROR_001, message inc how to fix and eg, impl get lzied class data()
+    //all code cleanup
 }
