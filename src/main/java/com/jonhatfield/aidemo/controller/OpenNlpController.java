@@ -1,14 +1,14 @@
 package com.jonhatfield.aidemo.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.jonhatfield.aidemo.dto.*;
 import com.jonhatfield.aidemo.service.OpenNlpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/opennlp")
@@ -55,5 +55,15 @@ public class OpenNlpController {
         return openNlpService.categorise(lemmatizeResponse.getLemmas());
     }
 
-    //TODO error handling - code, OPENNLP_ERROR_001, message inc how to fix and eg, get lzied class data()
+    @GetMapping("/possible-chat-responses")
+    public JsonNode getPossibleChatResponses() {
+        return openNlpService.getPossibleChatResponses();
+    }
+
+    @GetMapping("/lemmatized-classification-data")
+    public JsonNode getLemmatizedClassificationData() {
+        return openNlpService.getLemmatizedClassificationData();
+    }
+
+    //TODO error handling - code, OPENNLP_ERROR_001, message inc how to fix and eg, impl get lzied class data()
 }

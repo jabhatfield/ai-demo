@@ -1,5 +1,6 @@
 package com.jonhatfield.aidemo.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.jonhatfield.aidemo.dto.OpenNlpCategoriseResponse;
 import com.jonhatfield.aidemo.dto.OpenNlpLemmatizeResponse;
 import com.jonhatfield.aidemo.dto.OpenNlpPosResponse;
@@ -21,6 +22,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -131,6 +133,24 @@ public class OpenNlpService {
             }
 
             return new OpenNlpLemmatizeResponse(lemmas, probabilityPairs);
+        } catch (Exception e) {
+            log.error("error", e);
+            return null;//TODO error handling
+        }
+    }
+
+    public JsonNode getPossibleChatResponses() {
+        try {
+            return responseUtil.getChatResponses();
+        } catch (Exception e) {
+            log.error("error", e);
+            return null;//TODO error handling
+        }
+    }
+
+    public JsonNode getLemmatizedClassificationData() {
+        try {
+            return responseUtil.getLemmatizedClassificationData();
         } catch (Exception e) {
             log.error("error", e);
             return null;//TODO error handling
