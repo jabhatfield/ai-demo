@@ -2,6 +2,7 @@ package com.jonhatfield.aidemo.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jonhatfield.aidemo.dto.*;
+import com.jonhatfield.aidemo.exception.EmptyArrayException;
 import com.jonhatfield.aidemo.exception.MissingFieldException;
 import com.jonhatfield.aidemo.service.OpenNlpService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,21 +30,41 @@ public class OpenNlpController {
 
     @PostMapping("/categorise")
     public OpenNlpCategoriseResponse categorise(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
+        if(StringUtils.isBlank(openNlpTextRequest.getMessage())) {
+            throw new MissingFieldException("message");
+        }
         return openNlpService.categorise(new String[]{openNlpTextRequest.getMessage()});
     }
 
     @PostMapping("/tokenize")
     public OpenNlpTokenizeResponse tokenize(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
+        if(StringUtils.isBlank(openNlpTextRequest.getMessage())) {
+            throw new MissingFieldException("message");
+        }
         return openNlpService.tokenize(openNlpTextRequest.getMessage());
     }
 
     @PostMapping("/tag-parts-of-speech")
     public OpenNlpPosResponse tagPartsOfSpeech(@RequestBody OpenNlpPosRequest openNlpPosRequest) {
+        if(openNlpPosRequest.getTokens() == null) {
+            throw new MissingFieldException("tokens");
+        } else if(openNlpPosRequest.getTokens().length == 0) {
+            throw new EmptyArrayException("tokens");
+        }
         return openNlpService.tagPartsOfSpeech(openNlpPosRequest.getTokens());
     }
 
     @PostMapping("/lemmatize")
     public OpenNlpLemmatizeResponse lemmatize(@RequestBody OpenNlpLemmatizeRequest openNlpLemmatizeRequest) {
+        if(openNlpLemmatizeRequest.getTokens() == null) {
+            throw new MissingFieldException("tokens");
+        } else if(openNlpLemmatizeRequest.getTokens().length == 0) {
+            throw new EmptyArrayException("tokens");
+        } else if(openNlpLemmatizeRequest.getPosTags() == null) {
+            throw new MissingFieldException("posTags");
+        } else if(openNlpLemmatizeRequest.getPosTags().length == 0) {
+            throw new EmptyArrayException("posTags");
+        }
         return openNlpService.lemmatize(openNlpLemmatizeRequest.getTokens(), openNlpLemmatizeRequest.getPosTags());
     }
 
@@ -70,6 +91,5 @@ public class OpenNlpController {
         return openNlpService.getLemmatizedClassificationData();
     }
 
-    //TODO error handling - code, OPENNLP_ERROR_001, message inc how to fix and eg, impl get lzied class data()
-    //all code cleanup
+    //TODO error handling inc how to fix and eg, all code cleanup inc dlj
 }

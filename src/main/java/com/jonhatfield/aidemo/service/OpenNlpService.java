@@ -73,9 +73,8 @@ public class OpenNlpService {
 
             return new OpenNlpCategoriseResponse(category, reply, probabilities);
         } catch (Exception e) {
-            log.error("error", e);
-            //todo allow only first word for this API call
-            return null;//TODO error handling
+            log.error("Categorisation error", e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -94,8 +93,8 @@ public class OpenNlpService {
 
             return new OpenNlpTokenizeResponse(tokens, probabilityPairs);
         } catch (Exception e) {
-            log.error("error", e);
-            return null;//TODO error handling
+            log.error("Tokenization error", e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -114,8 +113,8 @@ public class OpenNlpService {
 
             return new OpenNlpPosResponse(tags, probabilityPairs);
         } catch (Exception e) {
-            log.error("error", e);
-            return null;//TODO error handling
+            log.error("Parts-of-speech tagging error", e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -134,8 +133,8 @@ public class OpenNlpService {
 
             return new OpenNlpLemmatizeResponse(lemmas, probabilityPairs);
         } catch (Exception e) {
-            log.error("error", e);
-            return null;//TODO error handling
+            log.error("Lemmatization error", e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -143,8 +142,8 @@ public class OpenNlpService {
         try {
             return responseUtil.getChatResponses();
         } catch (Exception e) {
-            log.error("error", e);
-            return null;//TODO error handling
+            log.error("Chat responses retrieval error", e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -152,8 +151,8 @@ public class OpenNlpService {
         try {
             return responseUtil.getLemmatizedClassificationData();
         } catch (Exception e) {
-            log.error("error", e);
-            return null;//TODO error handling
+            log.error("Lemmatization data retrieval error", e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

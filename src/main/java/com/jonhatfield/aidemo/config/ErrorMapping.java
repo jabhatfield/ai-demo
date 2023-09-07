@@ -1,5 +1,6 @@
 package com.jonhatfield.aidemo.config;
 
+import com.jonhatfield.aidemo.exception.EmptyArrayException;
 import com.jonhatfield.aidemo.exception.MissingFieldException;
 
 import java.util.HashMap;
@@ -7,8 +8,9 @@ import java.util.Map;
 
 public enum ErrorMapping {
 
-    MISSING_FIELD(MissingFieldException.class.getName(), "ERROR_001", true),
-    UNKNOWN("UNKNOWN", "ERROR_100", false);//OPENNLP_ERROR_001
+    MISSING_FIELD(MissingFieldException.class.getName(), "001_MISSING_FIELD", true),
+    EMPTY_ARRAY(EmptyArrayException.class.getName(), "002_EMPTY_ARRAY", true),
+    UNKNOWN("UNKNOWN", "100_UNKNOWN_ERROR", false);//OPENNLP_ERROR_001
 
     private final String exceptionName;
     private final String code;

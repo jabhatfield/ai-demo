@@ -32,14 +32,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("errorCode", errorMapping.getCode());
-
-        String message;
-        if(errorMapping.equals(ErrorMapping.UNKNOWN)) {
-            message = "Unknown error: " + runtimeException.getMessage();
-        } else {
-            message = runtimeException.getMessage();
-        }
-        objectNode.put("errorMessage", message);
+        objectNode.put("errorMessage", runtimeException.getMessage());
 
         HttpStatus httpStatus = errorMapping.isClientError() ? HttpStatus.BAD_REQUEST : HttpStatus.INTERNAL_SERVER_ERROR;
 
