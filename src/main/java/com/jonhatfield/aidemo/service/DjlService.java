@@ -2,6 +2,11 @@ package com.jonhatfield.aidemo.service;
 
 import ai.djl.Model;
 import ai.djl.basicdataset.cv.classification.Mnist;
+import ai.djl.inference.Predictor;
+import ai.djl.modality.Classifications;
+import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.ImageFactory;
+import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.Activation;
 import ai.djl.nn.Blocks;
@@ -15,13 +20,17 @@ import ai.djl.training.dataset.Dataset;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
+import ai.djl.translate.Translator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jonhatfield.aidemo.dto.DjlImageClassificationResponse;
 import com.jonhatfield.aidemo.dto.OpenNlpPosResponse;
+import com.jonhatfield.aidemo.util.ImageTranslator;
 import lombok.extern.slf4j.Slf4j;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -32,6 +41,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class DjlService {
+
+    @Value("classpath:images/0.png")
+    Resource handwrittenZero;
 
     public DjlImageClassificationResponse classifyImage(String message) {
         try {
@@ -57,6 +69,7 @@ public class DjlService {
 
             mlpModel.setBlock(block);
 
+            //train the model
             DefaultTrainingConfig config = new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
                     .addEvaluator(new Accuracy())
                     .addTrainingListeners(TrainingListener.Defaults.logging());
@@ -70,6 +83,13 @@ public class DjlService {
             //can now save model - if need to
             TrainingResult trainingResult = trainer.getTrainingResult();
 
+            //classify image
+            Image inputImage = ImageFactory.getInstance().fromUrl(handwrittenZero.getURL());
+
+            ImageTranslator imageTranslator = new ImageTranslator();
+            Predictor<Image, Classifications> predictor = mlpModel.newPredictor(imageTranslator);
+            Classifications predictions = predictor.predict(inputImage);
+            log.info(predictions.toString());
 
             return null;
         } catch (Exception e) {
