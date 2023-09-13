@@ -90,6 +90,4 @@ public class OpenNlpController {
     public JsonNode getLemmatizedClassificationData() {
         return openNlpService.getLemmatizedClassificationData();
     }
-
-    //TODO error handling, all code cleanup inc dlj
 }

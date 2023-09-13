@@ -23,6 +23,8 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 	implementation 'commons-io:commons-io:2.13.0'
 	implementation 'org.apache.opennlp:opennlp-tools:2.3.0'
+	implementation 'ai.djl:api:0.23.0'
+	implementation 'ai.djl:basicdataset:0.23.0'
 }
 
 tasks.named('test') {
