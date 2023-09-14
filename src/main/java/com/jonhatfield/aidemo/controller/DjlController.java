@@ -21,12 +21,17 @@ public class DjlController {
         this.djlService = djlService;
     }
 
-    @PostMapping("/classify-image")
+    @PostMapping("/classify-handwritten-number")
     public DjlImageClassificationResponse classifyImage(@RequestBody DjlImageClassificationRequest djlImageClassificationRequest) {
-        if(StringUtils.isBlank(djlImageClassificationRequest.getMessage())) {
-            throw new MissingFieldException("message");
+        if(StringUtils.isBlank(djlImageClassificationRequest.getFileName())) {
+            throw new MissingFieldException("fileName");
         }
-        return djlService.classifyImage(djlImageClassificationRequest.getMessage());
+        return djlService.classifyImage(djlImageClassificationRequest.getFileName());
+    }
+
+    @PostMapping("/classify-handwritten-zero")
+    public DjlImageClassificationResponse classifyZeroImage() {
+        return djlService.classifyZeroImage();
     }
 
     @GetMapping("/example-input-images")

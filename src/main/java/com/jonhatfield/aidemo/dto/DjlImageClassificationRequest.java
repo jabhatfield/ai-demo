@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class DjlImageClassificationRequest {
-    String message;
+    String fileName;
 }

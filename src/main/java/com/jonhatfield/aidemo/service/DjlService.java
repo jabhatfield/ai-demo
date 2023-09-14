@@ -45,9 +45,6 @@ public class DjlService {
 
     private static Model CACHED_MODEL = null;
 
-    @Value("classpath:images/0.png")
-    Resource handwrittenZero;
-
     private ResponseUtil responseUtil;
 
     @Autowired
@@ -55,7 +52,11 @@ public class DjlService {
         this.responseUtil = responseUtil;
     }
 
-    public DjlImageClassificationResponse classifyImage(String message) {
+    public DjlImageClassificationResponse classifyZeroImage() {
+        return classifyImage("0.png");
+    }
+
+    public DjlImageClassificationResponse classifyImage(String fileName) {
         try {
             Model mlpModel;
             if(CACHED_MODEL != null) {
@@ -101,7 +102,7 @@ public class DjlService {
             }
 
             //classify image
-            Image inputImage = ImageFactory.getInstance().fromUrl(handwrittenZero.getURL());
+            Image inputImage = ImageFactory.getInstance().fromUrl(responseUtil.getImageUri(fileName));
 
             ImageTranslator imageTranslator = new ImageTranslator();
             Predictor<Image, Classifications> predictor = mlpModel.newPredictor(imageTranslator);

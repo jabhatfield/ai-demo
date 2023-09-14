@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class ResponseUtil {
 
@@ -63,5 +65,14 @@ public class ResponseUtil {
             arrayNode.add(f.getName());
         }
         return arrayNode;
+    }
+
+    public String getImageUri(String fileName) throws IOException {
+        for(File f : imagesFolder.getFile().listFiles()) {
+            if(f.getName().equals(fileName)) {
+                return f.toURI().toString();
+            }
+        }
+        throw new RuntimeException("File not found: " + fileName);//TODO exceptionclass and doc it test it
     }
 }
