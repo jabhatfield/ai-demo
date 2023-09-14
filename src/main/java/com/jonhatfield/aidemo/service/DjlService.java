@@ -30,6 +30,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -39,6 +42,8 @@ import java.util.Locale;
 @Slf4j
 @Service
 public class DjlService {
+
+    private static Model CACHED_MODEL = null;
 
     @Value("classpath:images/0.png")
     Resource handwrittenZero;
@@ -52,41 +57,48 @@ public class DjlService {
 
     public DjlImageClassificationResponse classifyImage(String message) {
         try {
-            Model mlpModel = Model.newInstance("mlp");
+            Model mlpModel;
+            if(CACHED_MODEL != null) {
+                log.info("Loading cached model");
+                mlpModel = CACHED_MODEL;
+            } else {
+                log.info("Building new model");
+                mlpModel = Model.newInstance("mlp");
 
-            //prepare data - load dataset
-            int batchSize = 32;
-            Mnist trainingDataset = Mnist.builder()
-                    .optUsage(Dataset.Usage.TRAIN)
-                    .setSampling(batchSize, true)
-                    .build();
+                //prepare data - load dataset
+                int batchSize = 32;
+                Mnist trainingDataset = Mnist.builder()
+                        .optUsage(Dataset.Usage.TRAIN)
+                        .setSampling(batchSize, true)
+                        .build();
 
-            //build neural network
-            long inputSize = Mnist.IMAGE_HEIGHT * Mnist.IMAGE_WIDTH;
-            long outputSize = 10;
-            SequentialBlock block = new SequentialBlock();
-            block.add(Blocks.batchFlattenBlock(inputSize));
-            block.add(Linear.builder().setUnits(128).build());
-            block.add(Activation::relu);
-            block.add(Linear.builder().setUnits(64).build());
-            block.add(Activation::relu);
-            block.add(Linear.builder().setUnits(outputSize).build());
+                //build neural network
+                long inputSize = Mnist.IMAGE_HEIGHT * Mnist.IMAGE_WIDTH;
+                long outputSize = 10;
+                SequentialBlock block = new SequentialBlock();
+                block.add(Blocks.batchFlattenBlock(inputSize));
+                block.add(Linear.builder().setUnits(128).build());
+                block.add(Activation::relu);
+                block.add(Linear.builder().setUnits(64).build());
+                block.add(Activation::relu);
+                block.add(Linear.builder().setUnits(outputSize).build());
 
-            mlpModel.setBlock(block);
+                mlpModel.setBlock(block);
 
-            //train the model
-            DefaultTrainingConfig config = new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
-                    .addEvaluator(new Accuracy())
-                    .addTrainingListeners(TrainingListener.Defaults.logging());
+                //train the model
+                DefaultTrainingConfig config = new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
+                        .addEvaluator(new Accuracy())
+                        .addTrainingListeners(TrainingListener.Defaults.logging());
 
-            Trainer trainer = mlpModel.newTrainer(config);
+                Trainer trainer = mlpModel.newTrainer(config);
 
-            int trainingParamsInitializationBatchSize = 1;
-            trainer.initialize(new Shape(trainingParamsInitializationBatchSize, inputSize));
-            int epochs = 2;
-            EasyTrain.fit(trainer, epochs, trainingDataset, null);
-            //can now save model - if need to
-            TrainingResult trainingResult = trainer.getTrainingResult();
+                int trainingParamsInitializationBatchSize = 1;
+                trainer.initialize(new Shape(trainingParamsInitializationBatchSize, inputSize));
+                int epochs = 2;
+                EasyTrain.fit(trainer, epochs, trainingDataset, null);
+
+                CACHED_MODEL = mlpModel;
+            }
 
             //classify image
             Image inputImage = ImageFactory.getInstance().fromUrl(handwrittenZero.getURL());
@@ -108,6 +120,11 @@ public class DjlService {
     }
 
     public JsonNode getExampleInputImages() {
-        return null;
+        try {
+            return responseUtil.getImages();
+        } catch (Exception e) {
+            log.error("Image listing error", e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
