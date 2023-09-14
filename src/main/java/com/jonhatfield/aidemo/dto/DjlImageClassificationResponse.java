@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DjlImageClassificationResponse {
-    private String[] tags;
+    private String digit;
     List<ImmutablePair<String, Double>> probabilities;
 }

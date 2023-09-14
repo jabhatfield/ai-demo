@@ -25,7 +25,7 @@ public class ImageTranslator implements Translator<Image, Classifications> {
     public Classifications processOutput(TranslatorContext ctx, NDList list) {
         NDArray probabilities = list.singletonOrThrow().softmax(0);
         List<String> classNames = IntStream.range(0, 10).mapToObj(String::valueOf).collect(Collectors.toList());
-        return new Classifications(classNames, probabilities);
+        return new Classifications(classNames, probabilities, 10);
     }
 
     @Override
