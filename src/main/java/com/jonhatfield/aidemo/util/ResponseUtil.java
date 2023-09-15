@@ -14,10 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -61,9 +58,13 @@ public class ResponseUtil {
 
     public JsonNode getImages() throws IOException {
         ArrayNode arrayNode = mapper.createArrayNode();
+        List<String> sortedFileNames = new ArrayList<>();
         for(File f : imagesFolder.getFile().listFiles()) {
-            arrayNode.add(f.getName());
+            sortedFileNames.add(f.getName());
         }
+        Collections.sort(sortedFileNames);
+        sortedFileNames.stream()
+                .forEach(fileName -> arrayNode.add(fileName));
         return arrayNode;
     }
 
