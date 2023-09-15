@@ -21,6 +21,7 @@ import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jonhatfield.aidemo.dto.DjlImageClassificationResponse;
+import com.jonhatfield.aidemo.exception.ImageNotFoundException;
 import com.jonhatfield.aidemo.util.ImageTranslator;
 import com.jonhatfield.aidemo.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -114,6 +115,8 @@ public class DjlService {
             }
 
             return new DjlImageClassificationResponse(predictions.best().getClassName(), probabilityPairs);
+        } catch (ImageNotFoundException e) {
+            throw e;
         } catch (Exception e) {
             log.error("Image classification error", e);
             throw new RuntimeException(e.getMessage());

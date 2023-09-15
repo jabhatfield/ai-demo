@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.jonhatfield.aidemo.exception.ImageNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -74,6 +75,8 @@ public class ResponseUtil {
                 return f.toURI().toString();
             }
         }
-        throw new RuntimeException("File not found: " + fileName);//TODO exceptionclass and doc it test it
+        ImageNotFoundException e = new ImageNotFoundException(fileName);
+        log.error("Image file not found", e);
+        throw e;
     }
 }

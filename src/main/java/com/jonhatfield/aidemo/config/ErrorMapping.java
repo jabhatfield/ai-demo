@@ -1,6 +1,7 @@
 package com.jonhatfield.aidemo.config;
 
 import com.jonhatfield.aidemo.exception.EmptyArrayException;
+import com.jonhatfield.aidemo.exception.ImageNotFoundException;
 import com.jonhatfield.aidemo.exception.MissingFieldException;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ public enum ErrorMapping {
 
     MISSING_FIELD(MissingFieldException.class.getName(), "001_MISSING_FIELD", true),
     EMPTY_ARRAY(EmptyArrayException.class.getName(), "002_EMPTY_ARRAY", true),
+    MISSING_IMAGE(ImageNotFoundException.class.getName(), "003_MISSING_IMAGE_FILE", false),
     UNKNOWN("UNKNOWN", "100_UNKNOWN_ERROR", false);
 
     private final String exceptionName;
