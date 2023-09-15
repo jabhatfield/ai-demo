@@ -8,18 +8,12 @@ import com.jonhatfield.aidemo.service.OpenNlpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @Slf4j
 @RequestMapping("/opennlp")
 @RestController
 public class OpenNlpController {
-
-    @Value("${openai.model}")
-    private String model;
 
     private OpenNlpService openNlpService;
 

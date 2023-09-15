@@ -38,6 +38,4 @@ public class DjlController {
     public JsonNode getExampleInputImages() {
         return djlService.getExampleInputImages();
     }
-
-    //TODO error handling, all code cleanup inc dlj
 }
