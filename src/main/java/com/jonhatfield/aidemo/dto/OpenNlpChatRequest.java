@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class OpenNlpTextRequest {
+public class OpenNlpChatRequest {
     String message;
 }

@@ -1,10 +1,16 @@
 package com.jonhatfield.aidemo.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.jonhatfield.aidemo.config.ClientErrorDocumentation;
+import com.jonhatfield.aidemo.config.ServerErrorDocumentation;
 import com.jonhatfield.aidemo.dto.*;
 import com.jonhatfield.aidemo.exception.EmptyArrayException;
 import com.jonhatfield.aidemo.exception.MissingFieldException;
 import com.jonhatfield.aidemo.service.OpenNlpService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -25,19 +31,30 @@ public class OpenNlpController {
     }
 
     @PostMapping("/categorise")
-    public OpenNlpCategoriseResponse categorise(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
-        if(StringUtils.isBlank(openNlpTextRequest.getMessage())) {
+    public OpenNlpCategoriseResponse categorise(@RequestBody OpenNlpCategoriseRequest openNlpCategoriseRequest) {
+        if(StringUtils.isBlank(openNlpCategoriseRequest.getMessage())) {
             throw new MissingFieldException("message");
         }
-        return openNlpService.categorise(new String[]{openNlpTextRequest.getMessage()});
+        return openNlpService.categorise(new String[]{openNlpCategoriseRequest.getMessage()});
     }
 
+    @Operation(summary = "Tokenize a message",
+            description = "Tokenizes a message into an array of tokens and provides their probability of correctness")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful"),
+            @ApiResponse(responseCode = "400", description = "Client error",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ClientErrorDocumentation.class))),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ServerErrorDocumentation.class)))
+    })
     @PostMapping("/tokenize")
-    public OpenNlpTokenizeResponse tokenize(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
-        if(StringUtils.isBlank(openNlpTextRequest.getMessage())) {
+    public OpenNlpTokenizeResponse tokenize(@RequestBody OpenNlpTokenizeRequest openNlpTokenizeRequest) {
+        if(StringUtils.isBlank(openNlpTokenizeRequest.getMessage())) {
             throw new MissingFieldException("message");
         }
-        return openNlpService.tokenize(openNlpTextRequest.getMessage());
+        return openNlpService.tokenize(openNlpTokenizeRequest.getMessage());
     }
 
     @PostMapping("/tag-parts-of-speech")
@@ -65,11 +82,11 @@ public class OpenNlpController {
     }
 
     @PostMapping("/chat")
-    public OpenNlpCategoriseResponse chat(@RequestBody OpenNlpTextRequest openNlpTextRequest) {
-        if(StringUtils.isBlank(openNlpTextRequest.getMessage())) {
+    public OpenNlpCategoriseResponse chat(@RequestBody OpenNlpChatRequest openNlpChatRequest) {
+        if(StringUtils.isBlank(openNlpChatRequest.getMessage())) {
             throw new MissingFieldException("message");
         }
-        OpenNlpTokenizeResponse tokenizeResponse = openNlpService.tokenize(openNlpTextRequest.getMessage());
+        OpenNlpTokenizeResponse tokenizeResponse = openNlpService.tokenize(openNlpChatRequest.getMessage());
         String[] tokens = tokenizeResponse.getTokens();
         OpenNlpPosResponse posResponse = openNlpService.tagPartsOfSpeech(tokens);
         OpenNlpLemmatizeResponse lemmatizeResponse = openNlpService.lemmatize(tokens, posResponse.getTags());
