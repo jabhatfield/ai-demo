@@ -18,13 +18,13 @@ import ai.djl.training.dataset.Dataset;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.jonhatfield.aidemo.dto.DjlExampleInputImagesResponse;
 import com.jonhatfield.aidemo.dto.DjlImageClassificationResponse;
+import com.jonhatfield.aidemo.dto.helper.DjlHandwrittenNumber;
 import com.jonhatfield.aidemo.exception.ImageNotFoundException;
 import com.jonhatfield.aidemo.util.ImageTranslator;
 import com.jonhatfield.aidemo.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,12 +100,12 @@ public class DjlService {
             Predictor<Image, Classifications> predictor = mlpModel.newPredictor(imageTranslator);
             Classifications predictions = predictor.predict(inputImage);
 
-            List<ImmutablePair<String, Double>> probabilityPairs = new ArrayList<>();
+            List<DjlHandwrittenNumber> probabilities = new ArrayList<>();
             for(Classifications.Classification classification : predictions.topK()) {
-                probabilityPairs.add(new ImmutablePair<>(classification.getClassName(), classification.getProbability()));
+                probabilities.add(new DjlHandwrittenNumber(classification.getClassName(), classification.getProbability()));
             }
 
-            return new DjlImageClassificationResponse(predictions.best().getClassName(), probabilityPairs);
+            return new DjlImageClassificationResponse(predictions.best().getClassName(), probabilities);
         } catch (ImageNotFoundException e) {
             throw e;
         } catch (Exception e) {
@@ -114,7 +114,7 @@ public class DjlService {
         }
     }
 
-    public JsonNode getExampleInputImages() {
+    public DjlExampleInputImagesResponse getExampleInputImages() {
         try {
             return responseUtil.getImages();
         } catch (Exception e) {

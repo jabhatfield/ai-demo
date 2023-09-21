@@ -1,6 +1,6 @@
 package com.jonhatfield.aidemo.dto;
 
-import com.jonhatfield.aidemo.dto.helper.DjlHandwrittenNumber;
+import com.jonhatfield.aidemo.dto.helper.OpenNlpReplyCategorisation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DjlImageClassificationResponse {
-    private String handwrittenNumber;
-    List<DjlHandwrittenNumber> probabilities;
+public class OpenNlpPossibleChatResponsesResponse {
+    List<OpenNlpReplyCategorisation> possibleResponses;
 }

@@ -1,10 +1,8 @@
 package com.jonhatfield.aidemo.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.jonhatfield.aidemo.dto.OpenNlpCategoriseResponse;
-import com.jonhatfield.aidemo.dto.OpenNlpLemmatizeResponse;
-import com.jonhatfield.aidemo.dto.OpenNlpPosResponse;
-import com.jonhatfield.aidemo.dto.OpenNlpTokenizeResponse;
+import com.jonhatfield.aidemo.dto.*;
+import com.jonhatfield.aidemo.dto.helper.*;
 import com.jonhatfield.aidemo.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import opennlp.tools.doccat.*;
@@ -70,7 +68,12 @@ public class OpenNlpService {
             String category = myCategorizer.getBestCategory(outcomes);
 
             String reply = responseUtil.getResponse(category);
-            Map<String, Double> probabilities = myCategorizer.scoreMap(inputTokens);
+            Map<String, Double> scoreMap = myCategorizer.scoreMap(inputTokens);
+
+            List<OpenNlpCategory> probabilities = new ArrayList<>();
+            for (String key : scoreMap.keySet()) {
+                probabilities.add(new OpenNlpCategory(key, scoreMap.get(key)));
+            }
 
             return new OpenNlpCategoriseResponse(category, reply, probabilities);
         } catch (Exception e) {
@@ -87,12 +90,12 @@ public class OpenNlpService {
             String[] tokens = tokenizer.tokenize(inputText);
             double[] probabilities = tokenizer.getTokenProbabilities();
 
-            List<ImmutablePair<String, Double>> probabilityPairs = new ArrayList<>();
+            List<OpenNlpToken> tokenProbabilities = new ArrayList<>();
             for(int i = 0; i < tokens.length; i++) {
-                probabilityPairs.add(new ImmutablePair<>(tokens[i], probabilities[i]));
+                tokenProbabilities.add(new OpenNlpToken(tokens[i], probabilities[i]));
             }
 
-            return new OpenNlpTokenizeResponse(tokens, probabilityPairs);
+            return new OpenNlpTokenizeResponse(tokens, tokenProbabilities);
         } catch (Exception e) {
             log.error("Tokenization error", e);
             throw new RuntimeException(e.getMessage());
@@ -107,12 +110,12 @@ public class OpenNlpService {
             String tags[] = tagger.tag(tokens);
             double probabilities[] = tagger.probs();
 
-            List<ImmutablePair<String, Double>> probabilityPairs = new ArrayList<>();
+            List<OpenNlpTag> tagProbabilities = new ArrayList<>();
             for(int i = 0; i < tags.length; i++) {
-                probabilityPairs.add(new ImmutablePair<>(tags[i], probabilities[i]));
+                tagProbabilities.add(new OpenNlpTag(tags[i], probabilities[i]));
             }
 
-            return new OpenNlpPosResponse(tags, probabilityPairs);
+            return new OpenNlpPosResponse(tags, tagProbabilities);
         } catch (Exception e) {
             log.error("Parts-of-speech tagging error", e);
             throw new RuntimeException(e.getMessage());
@@ -127,28 +130,34 @@ public class OpenNlpService {
             String[] lemmas = lemmatizer.lemmatize(tokens, posTags);
             double probabilities[] = lemmatizer.probs();
 
-            List<ImmutablePair<String, Double>> probabilityPairs = new ArrayList<>();
+            List<OpenNlpLemma> lemmaProbabilities = new ArrayList<>();
             for(int i = 0; i < lemmas.length; i++) {
-                probabilityPairs.add(new ImmutablePair<>(lemmas[i], probabilities[i]));
+                lemmaProbabilities.add(new OpenNlpLemma(lemmas[i], probabilities[i]));
             }
 
-            return new OpenNlpLemmatizeResponse(lemmas, probabilityPairs);
+            return new OpenNlpLemmatizeResponse(lemmas, lemmaProbabilities);
         } catch (Exception e) {
             log.error("Lemmatization error", e);
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public JsonNode getPossibleChatResponses() {
+    public OpenNlpPossibleChatResponsesResponse getPossibleChatResponses() {
         try {
-            return responseUtil.getChatResponses();
+            JsonNode chatResponsesJson = responseUtil.getChatResponses();
+            List<OpenNlpReplyCategorisation> replyCategories = new ArrayList<>();
+            chatResponsesJson.fieldNames().forEachRemaining(
+                    category -> replyCategories.add(new OpenNlpReplyCategorisation(category,
+                            chatResponsesJson.get(category).asText())));
+            ;
+            return new OpenNlpPossibleChatResponsesResponse(replyCategories);
         } catch (Exception e) {
             log.error("Chat responses retrieval error", e);
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public JsonNode getLemmatizedClassificationData() {
+    public OpenNlpLemmatizedInputDataResponse getLemmatizedClassificationData() {
         try {
             return responseUtil.getLemmatizedClassificationData();
         } catch (Exception e) {

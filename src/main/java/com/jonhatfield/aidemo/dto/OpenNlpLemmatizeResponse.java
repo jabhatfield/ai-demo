@@ -1,5 +1,6 @@
 package com.jonhatfield.aidemo.dto;
 
+import com.jonhatfield.aidemo.dto.helper.OpenNlpLemma;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class OpenNlpLemmatizeResponse {
     private String[] lemmas;
-    List<ImmutablePair<String, Double>> probabilities;
+
+    List<OpenNlpLemma> probabilities;
 }

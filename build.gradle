@@ -26,6 +26,7 @@ dependencies {
 	implementation 'ai.djl:api:0.23.0'
 	implementation 'ai.djl:basicdataset:0.23.0'
 	implementation 'ai.djl.mxnet:mxnet-engine:0.23.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 }
 
 tasks.named('test') {

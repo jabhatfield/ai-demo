@@ -1,6 +1,5 @@
 package com.jonhatfield.aidemo.dto;
 
-import com.jonhatfield.aidemo.dto.helper.DjlHandwrittenNumber;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DjlImageClassificationResponse {
-    private String handwrittenNumber;
-    List<DjlHandwrittenNumber> probabilities;
+public class DjlExampleInputImagesResponse {
+    List<String> images;
 }

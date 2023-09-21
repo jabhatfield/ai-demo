@@ -3,6 +3,9 @@ package com.jonhatfield.aidemo.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.jonhatfield.aidemo.dto.DjlExampleInputImagesResponse;
+import com.jonhatfield.aidemo.dto.OpenNlpLemmatizedInputDataResponse;
+import com.jonhatfield.aidemo.dto.helper.OpenNlpLemmatizedDataCategorisation;
 import com.jonhatfield.aidemo.exception.ImageNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -39,7 +42,7 @@ public class ResponseUtil {
         return mapper.readTree(zooChatResponsesFile.getFile());
     }
 
-    public JsonNode getLemmatizedClassificationData() throws IOException {
+    public OpenNlpLemmatizedInputDataResponse getLemmatizedClassificationData() throws IOException {
         List<String> lines = FileUtils.readLines(intentDataFile.getFile(), StandardCharsets.UTF_8);
         Map<String, List<String>> responseMap = new HashMap<>();
         for(String line : lines) {
@@ -52,19 +55,20 @@ public class ResponseUtil {
                 responseMap.get(parts[0]).add(parts[1]);
             }
         }
-        return mapper.valueToTree(responseMap);
+        List<OpenNlpLemmatizedDataCategorisation> entries = new ArrayList<>();
+        for (String key : responseMap.keySet()) {
+            entries.add(new OpenNlpLemmatizedDataCategorisation(key, responseMap.get(key)));
+        }
+        return new OpenNlpLemmatizedInputDataResponse(entries);
     }
 
-    public JsonNode getImages() throws IOException {
-        ArrayNode arrayNode = mapper.createArrayNode();
+    public DjlExampleInputImagesResponse getImages() throws IOException {
         List<String> sortedFileNames = new ArrayList<>();
         for(File f : imagesFolder.getFile().listFiles()) {
             sortedFileNames.add(f.getName());
         }
         Collections.sort(sortedFileNames);
-        sortedFileNames.stream()
-                .forEach(fileName -> arrayNode.add(fileName));
-        return arrayNode;
+        return new DjlExampleInputImagesResponse(sortedFileNames);
     }
 
     public String getImageUri(String fileName) throws IOException {

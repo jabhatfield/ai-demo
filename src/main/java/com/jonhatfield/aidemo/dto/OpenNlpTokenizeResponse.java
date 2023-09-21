@@ -1,5 +1,7 @@
 package com.jonhatfield.aidemo.dto;
 
+import com.jonhatfield.aidemo.dto.helper.OpenNlpTag;
+import com.jonhatfield.aidemo.dto.helper.OpenNlpToken;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +16,5 @@ import java.util.List;
 @NoArgsConstructor
 public class OpenNlpTokenizeResponse {
     private String[] tokens;
-    List<ImmutablePair<String, Double>> probabilities;
+    List<OpenNlpToken> probabilities;
 }

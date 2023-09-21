@@ -1,5 +1,6 @@
 package com.jonhatfield.aidemo.dto;
 
+import com.jonhatfield.aidemo.dto.helper.OpenNlpTag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 public class OpenNlpPosResponse {
     private String[] tags;
-    List<ImmutablePair<String, Double>> probabilities;
+    List<OpenNlpTag> probabilities;
 }

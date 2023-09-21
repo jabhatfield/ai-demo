@@ -5,11 +5,13 @@ import com.jonhatfield.aidemo.dto.*;
 import com.jonhatfield.aidemo.exception.EmptyArrayException;
 import com.jonhatfield.aidemo.exception.MissingFieldException;
 import com.jonhatfield.aidemo.service.OpenNlpService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Zoo Chatbot")
 @Slf4j
 @RequestMapping("/opennlp")
 @RestController
@@ -76,12 +78,12 @@ public class OpenNlpController {
     }
 
     @GetMapping("/possible-chat-responses")
-    public JsonNode getPossibleChatResponses() {
+    public OpenNlpPossibleChatResponsesResponse getPossibleChatResponses() {
         return openNlpService.getPossibleChatResponses();
     }
 
     @GetMapping("/lemmatized-classification-data")
-    public JsonNode getLemmatizedClassificationData() {
+    public OpenNlpLemmatizedInputDataResponse getLemmatizedClassificationData() {
         return openNlpService.getLemmatizedClassificationData();
     }
 }

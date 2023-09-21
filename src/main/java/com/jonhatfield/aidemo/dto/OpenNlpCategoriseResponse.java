@@ -1,10 +1,13 @@
 package com.jonhatfield.aidemo.dto;
 
+import com.jonhatfield.aidemo.dto.helper.OpenNlpCategory;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -14,5 +17,5 @@ import java.util.Map;
 public class OpenNlpCategoriseResponse {
     private String category;
     private String reply;
-    private Map<String, Double> probabilities;
+    private List<OpenNlpCategory> probabilities;
 }
