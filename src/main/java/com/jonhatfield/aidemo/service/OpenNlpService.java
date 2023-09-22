@@ -13,10 +13,7 @@ import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.*;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -30,18 +27,6 @@ import java.util.Map;
 @Service
 public class OpenNlpService {
 
-    @Value("classpath:lemmatized-classification-data.txt")
-    Resource intentDataFile;
-
-    @Value("classpath:en-token.bin")
-    Resource tokenizerPretrainedModel;
-
-    @Value("classpath:en-pos-maxent.bin")
-    Resource posPretrainedModel;
-
-    @Value("classpath:en-lemmatizer.bin")
-    Resource lemmatizerPretrainedModel;
-
     private ResponseUtil responseUtil;
 
     @Autowired
@@ -51,7 +36,8 @@ public class OpenNlpService {
 
     public OpenNlpCategoriseResponse categorise(String[] inputTokens) {
         try {
-            InputStreamFactory inputStreamFactory = new MarkableFileInputStreamFactory(intentDataFile.getFile());
+            InputStreamFactory inputStreamFactory = new MarkableFileInputStreamFactory(responseUtil
+                            .getFileWithinJar("lemmatized-classification-data.txt"));
             ObjectStream<String> lineStream = new PlainTextByLineStream(inputStreamFactory,"UTF-8");
             ObjectStream<DocumentSample> sampleStream = new DocumentSampleStream(lineStream);
 
@@ -84,7 +70,7 @@ public class OpenNlpService {
 
     public OpenNlpTokenizeResponse tokenize(String inputText) {
         try {
-            InputStream modelIn = new FileInputStream(tokenizerPretrainedModel.getFile());
+            InputStream modelIn = new FileInputStream(responseUtil.getFileWithinJar("en-token.bin"));
             TokenizerModel model = new TokenizerModel(modelIn);
             TokenizerME tokenizer = new TokenizerME(model);
             String[] tokens = tokenizer.tokenize(inputText);
@@ -104,7 +90,7 @@ public class OpenNlpService {
 
     public OpenNlpPosResponse tagPartsOfSpeech(String[] tokens) {
         try {
-            InputStream modelIn = new FileInputStream(posPretrainedModel.getFile());
+            InputStream modelIn = new FileInputStream(responseUtil.getFileWithinJar("en-pos-maxent.bin"));
             POSModel model = new POSModel(modelIn);
             POSTaggerME tagger = new POSTaggerME(model);
             String tags[] = tagger.tag(tokens);
@@ -124,7 +110,7 @@ public class OpenNlpService {
 
     public OpenNlpLemmatizeResponse lemmatize(String[] tokens, String[] posTags) {
         try {
-            InputStream modelIn = new FileInputStream(lemmatizerPretrainedModel.getFile());
+            InputStream modelIn = new FileInputStream(responseUtil.getFileWithinJar("en-lemmatizer.bin"));
             LemmatizerModel model = new LemmatizerModel(modelIn);
             LemmatizerME lemmatizer = new LemmatizerME(model);
             String[] lemmas = lemmatizer.lemmatize(tokens, posTags);

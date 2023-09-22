@@ -2,15 +2,13 @@ package com.jonhatfield.aidemo.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.jonhatfield.aidemo.dto.DjlExampleInputImagesResponse;
 import com.jonhatfield.aidemo.dto.OpenNlpLemmatizedInputDataResponse;
 import com.jonhatfield.aidemo.dto.helper.OpenNlpLemmatizedDataCategorisation;
 import com.jonhatfield.aidemo.exception.ImageNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -24,26 +22,23 @@ public class ResponseUtil {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    @Value("classpath:zoo-chat-responses.json")
-    Resource zooChatResponsesFile;
-
-    @Value("classpath:lemmatized-classification-data.txt")
-    Resource intentDataFile;
-
-    @Value("classpath:images")
-    Resource imagesFolder;
-
     public String getResponse(String openNlpCategory) throws IOException {
         JsonNode jsonNode = getChatResponses();
         return jsonNode.get(openNlpCategory).asText();
     }
 
     public JsonNode getChatResponses() throws IOException {
-        return mapper.readTree(zooChatResponsesFile.getFile());
+        return mapper.readTree(getFileWithinJar("zoo-chat-responses.json"));
+    }
+
+    public File getFileWithinJar(String fileName) {
+        ClassPathResource res = new ClassPathResource("src/main/resources/" + fileName);
+        return new File(res.getPath());
     }
 
     public OpenNlpLemmatizedInputDataResponse getLemmatizedClassificationData() throws IOException {
-        List<String> lines = FileUtils.readLines(intentDataFile.getFile(), StandardCharsets.UTF_8);
+        List<String> lines = FileUtils
+                .readLines(getFileWithinJar("lemmatized-classification-data.txt"), StandardCharsets.UTF_8);
         Map<String, List<String>> responseMap = new HashMap<>();
         for(String line : lines) {
             String parts[] = line.split(" ", 2);
@@ -64,7 +59,7 @@ public class ResponseUtil {
 
     public DjlExampleInputImagesResponse getImages() throws IOException {
         List<String> sortedFileNames = new ArrayList<>();
-        for(File f : imagesFolder.getFile().listFiles()) {
+        for(File f : getFileWithinJar("images").listFiles()) {
             sortedFileNames.add(f.getName());
         }
         Collections.sort(sortedFileNames);
@@ -72,7 +67,7 @@ public class ResponseUtil {
     }
 
     public String getImageUri(String fileName) throws IOException {
-        for(File f : imagesFolder.getFile().listFiles()) {
+        for(File f : getFileWithinJar("images").listFiles()) {
             if(f.getName().equals(fileName)) {
                 return f.toURI().toString();
             }

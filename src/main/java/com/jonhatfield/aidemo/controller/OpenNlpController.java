@@ -30,14 +30,6 @@ public class OpenNlpController {
         this.openNlpService = openNlpService;
     }
 
-    @PostMapping("/categorise")
-    public OpenNlpCategoriseResponse categorise(@RequestBody OpenNlpCategoriseRequest openNlpCategoriseRequest) {
-        if(StringUtils.isBlank(openNlpCategoriseRequest.getMessage())) {
-            throw new MissingFieldException("message");
-        }
-        return openNlpService.categorise(new String[]{openNlpCategoriseRequest.getMessage()});
-    }
-
     @Operation(summary = "Tokenize a message",
             description = "Tokenizes a message into an array of tokens and provides their probability of correctness")
     @ApiResponses(value = {
