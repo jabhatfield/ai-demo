@@ -20,6 +20,9 @@ import java.util.*;
 @Component
 public class ResponseUtil {
 
+    public static final String SERVER_ERROR_RESPONSE_EXAMPLE = "{ \"errorCode\": \"100_UNKNOWN_ERROR\", " +
+            "\"errorMessage\": \"Cannot invoke \\\"String.toString()\\\" because \\\"response\\\" is null. See log for details\" }";
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public String getResponse(String openNlpCategory) throws IOException {

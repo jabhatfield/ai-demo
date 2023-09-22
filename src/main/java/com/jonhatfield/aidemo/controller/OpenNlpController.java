@@ -1,11 +1,10 @@
 package com.jonhatfield.aidemo.controller;
 
-import com.jonhatfield.aidemo.config.ClientErrorDocumentation;
-import com.jonhatfield.aidemo.config.ServerErrorDocumentation;
 import com.jonhatfield.aidemo.dto.*;
 import com.jonhatfield.aidemo.exception.EmptyArrayException;
 import com.jonhatfield.aidemo.exception.MissingFieldException;
 import com.jonhatfield.aidemo.service.OpenNlpService;
+import com.jonhatfield.aidemo.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,10 +35,11 @@ public class OpenNlpController {
             @ApiResponse(responseCode = "200", description = "Successful"),
             @ApiResponse(responseCode = "400", description = "Client error",
                     content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ClientErrorDocumentation.class))),
+                    schema = @Schema(example = "{ \"errorCode\": \"001_MISSING_FIELD\", " +
+                            "\"errorMessage\": \"Field 'message' is required\" }"))),
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ServerErrorDocumentation.class)))
+                    schema = @Schema(example = ResponseUtil.SERVER_ERROR_RESPONSE_EXAMPLE)))
     })
     @PostMapping("/tokenize")
     public OpenNlpTokenizeResponse tokenize(@RequestBody OpenNlpTokenizeRequest openNlpTokenizeRequest) {
@@ -49,6 +49,18 @@ public class OpenNlpController {
         return openNlpService.tokenize(openNlpTokenizeRequest.getMessage());
     }
 
+    @Operation(summary = "Tag parts of speech",
+            description = "Tags an array of tokens with part-of-speech and provides their probability of correctness")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful"),
+            @ApiResponse(responseCode = "400", description = "Client error",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(example = "{ \"errorCode\": \"001_MISSING_FIELD\", " +
+                            "\"errorMessage\": \"Field 'tokens' is required\" }"))),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(example = ResponseUtil.SERVER_ERROR_RESPONSE_EXAMPLE)))
+    })
     @PostMapping("/tag-parts-of-speech")
     public OpenNlpPosResponse tagPartsOfSpeech(@RequestBody OpenNlpPosRequest openNlpPosRequest) {
         if(openNlpPosRequest.getTokens() == null) {
