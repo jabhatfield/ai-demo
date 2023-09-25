@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -22,6 +24,8 @@ public class ResponseUtil {
 
     public static final String SERVER_ERROR_RESPONSE_EXAMPLE = "{ \"errorCode\": \"100_UNKNOWN_ERROR\", " +
             "\"errorMessage\": \"Cannot invoke \\\"String.toString()\\\" because \\\"response\\\" is null. See log for details\" }";
+
+    public static final String PROBABILITY_TEN_DP = "Probability of correctness to 10 d.p.";
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -78,5 +82,11 @@ public class ResponseUtil {
         ImageNotFoundException e = new ImageNotFoundException(fileName);
         log.error("Image file not found", e);
         throw e;
+    }
+
+    public double roundDouble(Double d) {
+        BigDecimal bd = BigDecimal.valueOf(d);
+        bd = bd.setScale(10, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

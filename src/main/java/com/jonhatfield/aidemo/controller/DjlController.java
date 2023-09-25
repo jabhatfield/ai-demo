@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Handwriting Recogniser")
 @Slf4j
-@RequestMapping("/djl")
+@RequestMapping("/handwriting-recogniser")
 @RestController
 public class DjlController {
 

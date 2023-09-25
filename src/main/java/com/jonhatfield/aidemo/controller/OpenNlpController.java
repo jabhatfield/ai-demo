@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Zoo Chatbot")
 @Slf4j
-@RequestMapping("/opennlp")
+@RequestMapping("/zoo-chatbot")
 @RestController
 public class OpenNlpController {
 

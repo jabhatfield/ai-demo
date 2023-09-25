@@ -18,12 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OpenNlpTokenizeResponse {
-    @Schema(example = "[\"any\", \"giraffes\", \"?\"]", required = true)
+    @ArraySchema(arraySchema = @Schema(description = "Tokenized message", required = true,
+            example = "[\"any\", \"giraffes\", \"?\"]"))
     private String[] tokens;
 
-    @Schema(example = "[ { \"token\": \"any\", \"probability\": 1.0 }, " +
-            "{ \"token\": \"giraffes\", \"probability\": 0.9925965989060637 }, " +
-            "{ \"token\": \"?\", \"probability\": 1.0 } ]",
-            required = true)
+    @ArraySchema(arraySchema = @Schema(description = "Probabilities of correctness", required = true,
+            example = "[ { \"token\": \"any\", \"probability\": 1.0 }, " +
+            "{ \"token\": \"giraffes\", \"probability\": 0.9925965989 }, " +
+            "{ \"token\": \"?\", \"probability\": 1.0 } ]"))
     List<OpenNlpToken> probabilities;
 }

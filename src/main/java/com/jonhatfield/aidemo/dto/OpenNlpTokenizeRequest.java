@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class OpenNlpTokenizeRequest {
-    @Schema(example = "any giraffes?", required = true)
+
+    @Schema(description = "Message to tokenize", required = true, example = "any giraffes?")
     String message;
 }

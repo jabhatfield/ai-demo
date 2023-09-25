@@ -58,7 +58,7 @@ public class OpenNlpService {
 
             List<OpenNlpCategory> probabilities = new ArrayList<>();
             for (String key : scoreMap.keySet()) {
-                probabilities.add(new OpenNlpCategory(key, scoreMap.get(key)));
+                probabilities.add(new OpenNlpCategory(key, responseUtil.roundDouble(scoreMap.get(key))));
             }
 
             return new OpenNlpCategoriseResponse(category, reply, probabilities);
@@ -78,7 +78,7 @@ public class OpenNlpService {
 
             List<OpenNlpToken> tokenProbabilities = new ArrayList<>();
             for(int i = 0; i < tokens.length; i++) {
-                tokenProbabilities.add(new OpenNlpToken(tokens[i], probabilities[i]));
+                tokenProbabilities.add(new OpenNlpToken(tokens[i], responseUtil.roundDouble(probabilities[i])));
             }
 
             return new OpenNlpTokenizeResponse(tokens, tokenProbabilities);
@@ -98,7 +98,7 @@ public class OpenNlpService {
 
             List<OpenNlpTag> tagProbabilities = new ArrayList<>();
             for(int i = 0; i < tags.length; i++) {
-                tagProbabilities.add(new OpenNlpTag(tags[i], probabilities[i]));
+                tagProbabilities.add(new OpenNlpTag(tags[i], responseUtil.roundDouble(probabilities[i])));
             }
 
             return new OpenNlpPosResponse(tags, tagProbabilities);
@@ -118,7 +118,7 @@ public class OpenNlpService {
 
             List<OpenNlpLemma> lemmaProbabilities = new ArrayList<>();
             for(int i = 0; i < lemmas.length; i++) {
-                lemmaProbabilities.add(new OpenNlpLemma(lemmas[i], probabilities[i]));
+                lemmaProbabilities.add(new OpenNlpLemma(lemmas[i], responseUtil.roundDouble(probabilities[i])));
             }
 
             return new OpenNlpLemmatizeResponse(lemmas, lemmaProbabilities);

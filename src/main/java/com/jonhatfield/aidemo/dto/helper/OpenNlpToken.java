@@ -1,5 +1,6 @@
 package com.jonhatfield.aidemo.dto.helper;
 
+import com.jonhatfield.aidemo.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,9 +13,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OpenNlpToken {
-    @Schema(required = true)
+    @Schema(description = "A single token", required = true, example = "giraffes")
     private String token;
 
-    @Schema(required = true)
+    @Schema(description = ResponseUtil.PROBABILITY_TEN_DP, required = true, example = "0.9925965989")
     private Double probability;
 }

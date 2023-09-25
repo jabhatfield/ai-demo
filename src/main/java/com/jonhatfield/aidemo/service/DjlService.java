@@ -102,7 +102,8 @@ public class DjlService {
 
             List<DjlHandwrittenNumber> probabilities = new ArrayList<>();
             for(Classifications.Classification classification : predictions.topK()) {
-                probabilities.add(new DjlHandwrittenNumber(classification.getClassName(), classification.getProbability()));
+                probabilities.add(new DjlHandwrittenNumber(classification.getClassName(),
+                        responseUtil.roundDouble(classification.getProbability())));
             }
 
             return new DjlImageClassificationResponse(predictions.best().getClassName(), probabilities);
