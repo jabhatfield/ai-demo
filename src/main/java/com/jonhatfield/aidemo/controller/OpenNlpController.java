@@ -71,6 +71,18 @@ public class OpenNlpController {
         return openNlpService.tagPartsOfSpeech(openNlpPosRequest.getTokens());
     }
 
+    @Operation(summary = "Lemmatize tokens",
+            description = "Lemmatizes an array of tokens and provides their probability of correctness")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful"),
+            @ApiResponse(responseCode = "400", description = "Client error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{ \"errorCode\": \"001_MISSING_FIELD\", " +
+                                    "\"errorMessage\": \"Field 'tokens' is required\" }"))),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = ResponseUtil.SERVER_ERROR_RESPONSE_EXAMPLE)))
+    })
     @PostMapping("/lemmatize")
     public OpenNlpLemmatizeResponse lemmatize(@RequestBody OpenNlpLemmatizeRequest openNlpLemmatizeRequest) {
         if(openNlpLemmatizeRequest.getTokens() == null) {
@@ -85,6 +97,18 @@ public class OpenNlpController {
         return openNlpService.lemmatize(openNlpLemmatizeRequest.getTokens(), openNlpLemmatizeRequest.getPosTags());
     }
 
+    @Operation(summary = "Chat with the Zoo Chatbot",
+            description = "Replies to a message and provides the probability of correctness of each possible reply")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful"),
+            @ApiResponse(responseCode = "400", description = "Client error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{ \"errorCode\": \"001_MISSING_FIELD\", " +
+                                    "\"errorMessage\": \"Field 'message' is required\" }"))),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = ResponseUtil.SERVER_ERROR_RESPONSE_EXAMPLE)))
+    })
     @PostMapping("/chat")
     public OpenNlpCategoriseResponse chat(@RequestBody OpenNlpChatRequest openNlpChatRequest) {
         if(StringUtils.isBlank(openNlpChatRequest.getMessage())) {
@@ -98,11 +122,27 @@ public class OpenNlpController {
         return openNlpService.categorise(lemmatizeResponse.getLemmas());
     }
 
+    @Operation(summary = "List possible responses",
+            description = "Lists all possible Chatbot responses")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful"),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = ResponseUtil.SERVER_ERROR_RESPONSE_EXAMPLE)))
+    })
     @GetMapping("/possible-chat-responses")
     public OpenNlpPossibleChatResponsesResponse getPossibleChatResponses() {
         return openNlpService.getPossibleChatResponses();
     }
 
+    @Operation(summary = "List lemmatized classification data",
+            description = "Lists the lemmatized classification data used for training the Chatbot")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful"),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = ResponseUtil.SERVER_ERROR_RESPONSE_EXAMPLE)))
+    })
     @GetMapping("/lemmatized-classification-data")
     public OpenNlpLemmatizedInputDataResponse getLemmatizedClassificationData() {
         return openNlpService.getLemmatizedClassificationData();

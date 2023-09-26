@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Schema(name="ZooChatbotToken", description="Model for holding a part-of-speech tag and its associated probability")
+@Schema(name="ZooChatbotTag", description="Model for holding a part-of-speech tag and its associated probability")
 @Getter
 @Setter
 @AllArgsConstructor
