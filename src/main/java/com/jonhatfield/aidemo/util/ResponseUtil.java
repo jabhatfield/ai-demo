@@ -8,11 +8,15 @@ import com.jonhatfield.aidemo.dto.helper.OpenNlpLemmatizedDataCategorisation;
 import com.jonhatfield.aidemo.exception.ImageNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.ClassPathResource;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
@@ -29,6 +33,9 @@ public class ResponseUtil {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     public String getResponse(String openNlpCategory) throws IOException {
         JsonNode jsonNode = getChatResponses();
         return jsonNode.get(openNlpCategory).asText();
@@ -38,9 +45,23 @@ public class ResponseUtil {
         return mapper.readTree(getFileWithinJar("zoo-chat-responses.json"));
     }
 
-    public File getFileWithinJar(String fileName) {
-        ClassPathResource res = new ClassPathResource("src/main/resources/" + fileName);
-        return new File(res.getPath());
+    public File getFileWithinJar(String fileName) throws IOException {
+        log.info("reached");
+        Resource[] resources = applicationContext.getResources("classpath*:" + fileName);
+        InputStream inputStream = resources[0].getInputStream();
+        String fileNameSuffix = fileName.substring(fileName.lastIndexOf("."));
+        File tmpFile = File.createTempFile("tmp-resource", fileNameSuffix);
+        try {
+            FileUtils.copyInputStreamToFile(inputStream, tmpFile);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+        return tmpFile;
+    }
+
+    public InputStream getImageInputStream(String fileName) throws IOException {
+        Resource[] resources = applicationContext.getResources("classpath*:images/" + fileName);
+        return resources[0].getInputStream();
     }
 
     public OpenNlpLemmatizedInputDataResponse getLemmatizedClassificationData() throws IOException {

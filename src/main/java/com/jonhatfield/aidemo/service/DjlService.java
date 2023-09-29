@@ -94,7 +94,7 @@ public class DjlService {
             }
 
             //classify image
-            Image inputImage = ImageFactory.getInstance().fromUrl(responseUtil.getImageUri(fileName));
+            Image inputImage = ImageFactory.getInstance().fromInputStream(responseUtil.getImageInputStream(fileName));
 
             ImageTranslator imageTranslator = new ImageTranslator();
             Predictor<Image, Classifications> predictor = mlpModel.newPredictor(imageTranslator);
