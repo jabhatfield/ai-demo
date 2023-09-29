@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Map;
 
 @Schema(name="ZooChatbotChatResponse", description="Model for returning replies and their associated probabilities")
 @Getter

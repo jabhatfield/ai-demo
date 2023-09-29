@@ -46,7 +46,6 @@ public class ResponseUtil {
     }
 
     public File getFileWithinJar(String fileName) throws IOException {
-        log.info("reached");
         Resource[] resources = applicationContext.getResources("classpath*:" + fileName);
         InputStream inputStream = resources[0].getInputStream();
         String fileNameSuffix = fileName.substring(fileName.lastIndexOf("."));

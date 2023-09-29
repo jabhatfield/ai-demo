@@ -1,7 +1,6 @@
 package com.jonhatfield.aidemo.dto;
 
 import com.jonhatfield.aidemo.dto.helper.OpenNlpLemmatizedDataCategorisation;
-import com.jonhatfield.aidemo.dto.helper.OpenNlpReplyCategorisation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

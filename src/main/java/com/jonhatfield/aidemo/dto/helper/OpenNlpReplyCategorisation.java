@@ -1,6 +1,5 @@
 package com.jonhatfield.aidemo.dto.helper;
 
-import com.jonhatfield.aidemo.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

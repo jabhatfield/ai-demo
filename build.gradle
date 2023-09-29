@@ -34,16 +34,14 @@ tasks.named('test') {
 }
 
 task saveImageFilenames {
-	dependsOn(processResources)//build
+	dependsOn(processResources)
 	List<String> fileNames = new ArrayList<>()
 	file('src/main/resources/images').listFiles().findAll {
 		println it.name
 		fileNames.add(it.name)
 		Collections.sort(fileNames)
-		//new File("${project.buildDir}/resources/main/images/image-filenames.txt").text = fileNames.join ("\n")
-		new File("src/main/resources/images/image-filenames.txt").text = fileNames.join ("\n")
+		new File("src/main/resources/image-filenames.txt").text = fileNames.join ("\n")
 	}
 	println "${project.buildDir}"
 	println 'save filenames for JAR access'
-	//add to gitignore. test all in ide & running jar from /build/libs
 }

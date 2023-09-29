@@ -1,7 +1,8 @@
 package com.jonhatfield.aidemo.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.jonhatfield.aidemo.dto.*;
+import com.jonhatfield.aidemo.dto.DjlExampleInputImagesResponse;
+import com.jonhatfield.aidemo.dto.DjlImageClassificationRequest;
+import com.jonhatfield.aidemo.dto.DjlImageClassificationResponse;
 import com.jonhatfield.aidemo.exception.MissingFieldException;
 import com.jonhatfield.aidemo.service.DjlService;
 import com.jonhatfield.aidemo.util.ResponseUtil;

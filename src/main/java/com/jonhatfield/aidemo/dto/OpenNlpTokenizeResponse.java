@@ -1,6 +1,5 @@
 package com.jonhatfield.aidemo.dto;
 
-import com.jonhatfield.aidemo.dto.helper.OpenNlpTag;
 import com.jonhatfield.aidemo.dto.helper.OpenNlpToken;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.List;
 
