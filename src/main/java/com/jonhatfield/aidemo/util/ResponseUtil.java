@@ -61,6 +61,11 @@ public class ResponseUtil {
 
     public InputStream getImageInputStream(String fileName) throws IOException {
         Resource[] resources = applicationContext.getResources("classpath*:images/" + fileName);
+        if(resources.length == 0) {
+            ImageNotFoundException e = new ImageNotFoundException(fileName);
+            log.error("Image file not found", e);
+            throw e;
+        }
         return resources[0].getInputStream();
     }
 
@@ -86,23 +91,9 @@ public class ResponseUtil {
     }
 
     public DjlExampleInputImagesResponse getImages() throws IOException {
-        List<String> sortedFileNames = new ArrayList<>();
-        for(File f : getFileWithinJar("images").listFiles()) {
-            sortedFileNames.add(f.getName());
-        }
-        Collections.sort(sortedFileNames);
-        return new DjlExampleInputImagesResponse(sortedFileNames);
-    }
-
-    public String getImageUri(String fileName) throws IOException {
-        for(File f : getFileWithinJar("images").listFiles()) {
-            if(f.getName().equals(fileName)) {
-                return f.toURI().toString();
-            }
-        }
-        ImageNotFoundException e = new ImageNotFoundException(fileName);
-        log.error("Image file not found", e);
-        throw e;
+        List<String> lines = FileUtils
+                .readLines(getFileWithinJar("image-filenames.txt"), StandardCharsets.UTF_8);
+        return new DjlExampleInputImagesResponse(lines);
     }
 
     public double roundDouble(Double d) {

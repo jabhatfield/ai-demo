@@ -45,4 +45,5 @@ task saveImageFilenames {
 	}
 	println "${project.buildDir}"
 	println 'save filenames for JAR access'
+	//add to gitignore. test all in ide & running jar from /build/libs
 }
