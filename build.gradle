@@ -43,5 +43,5 @@ task saveImageFilenames {
 		new File("src/main/resources/image-filenames.txt").text = fileNames.join ("\n")
 	}
 	println "${project.buildDir}"
-	println 'save filenames for JAR access'
+	println 'Saved filenames for JAR access'
 }
