@@ -34,7 +34,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         objectNode.put("errorCode", errorMapping.getCode());
 
         String errorMessage = runtimeException.getMessage();
-        if(!errorMapping.isClientError()) {
+        if(errorMapping.equals(ErrorMapping.UNKNOWN)) {
             errorMessage += ". See log for details";
         }
         objectNode.put("errorMessage", errorMessage);
