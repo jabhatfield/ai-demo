@@ -97,7 +97,7 @@ public class OpenNlpController {
         return openNlpService.lemmatize(openNlpLemmatizeRequest.getTokens(), openNlpLemmatizeRequest.getPosTags());
     }
 
-    @Operation(summary = "Chat with the Zoo Chatbot",
+    @Operation(summary = "Chat with the zoo chatbot",
             description = "Replies to a message and provides the probability of correctness of each possible reply")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful"),
@@ -123,7 +123,7 @@ public class OpenNlpController {
     }
 
     @Operation(summary = "List possible responses",
-            description = "Lists all possible Chatbot responses")
+            description = "Lists all possible chatbot responses")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful"),
             @ApiResponse(responseCode = "500", description = "Server error",
@@ -136,7 +136,7 @@ public class OpenNlpController {
     }
 
     @Operation(summary = "List lemmatized classification data",
-            description = "Lists the lemmatized classification data used for training the Chatbot")
+            description = "Lists the lemmatized classification data used for training the chatbot")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful"),
             @ApiResponse(responseCode = "500", description = "Server error",
