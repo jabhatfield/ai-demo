@@ -62,7 +62,7 @@ public class DjlService {
                 int batchSize = 32;
                 Mnist trainingDataset = Mnist.builder()
                         .optUsage(Dataset.Usage.TRAIN)
-                        .setSampling(batchSize, true)
+                        .setSampling(batchSize, false)
                         .build();
 
                 //build neural network

@@ -22,8 +22,8 @@ public class DjlImageClassificationResponse {
     private String handwrittenNumber;
 
     @ArraySchema(arraySchema = @Schema(description = "Probabilities of correctness", required = true,
-            example = "[ { \"handwrittenNumber\": \"0\", \"probability\": 0.9994780421 }, " +
-                    "{ \"handwrittenNumber\": \"2\", \"probability\": 2.689516E-4 }, " +
-                    "{ \"handwrittenNumber\": \"6\", \"probability\": 1.560141E-4 } ]"))
+            example = "[ { \"handwrittenNumber\": \"0\", \"probability\": 0.9999525547 }, " +
+                    "{ \"handwrittenNumber\": \"2\", \"probability\": 4.18071E-5 }, " +
+                    "{ \"handwrittenNumber\": \"6\", \"probability\": 2.9869E-6 } ]"))
     List<DjlHandwrittenNumber> probabilities;
 }
